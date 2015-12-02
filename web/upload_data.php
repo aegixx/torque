@@ -4,7 +4,7 @@ require_once 'creds.php';
 require_once 'auth_app.php';
 
 // Create an array of all the existing fields in the database
-$mysqli = $mysqli->query("SHOW COLUMNS FROM {$db_table}") or die("ERROR: {$mysqli->error}");
+$result = $mysqli->query("SHOW COLUMNS FROM {$db_table}") or die("ERROR: {$mysqli->error}");
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $dbfields[] = ($row['Field']);
