@@ -1,5 +1,3 @@
-USE `torque`;
-
 DROP TABLE IF EXISTS `raw_logs`;
 CREATE TABLE `raw_logs` (
   `v` varchar(1) NOT NULL,

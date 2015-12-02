@@ -7,7 +7,7 @@ if ($mysqli->connect_error) {
 }
 
 $db_table = 'raw_logs';
-$db_keys_table = 'keys';
+$db_keys_table = 'key_defs';
 
 // User credentials for Browser login
 $auth_user = $_SERVER['AUTH_USER'];    //Sample: 'torque'
