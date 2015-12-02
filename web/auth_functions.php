@@ -92,7 +92,7 @@ function auth_id()
 
     // Parse IDs from "creds.php", if IDs are defined these will overrule HASHES
     $auth_by_hash_possible = false;
-    if (isset($torque_id) && !empty($torque_id))
+    if (!empty($torque_id))
     {
         if (!is_array($torque_id))
             $torque_id = array($torque_id);
@@ -101,7 +101,7 @@ function auth_id()
         $auth_by_hash_possible = true;
     }
     // Parse HASHES
-    elseif (isset($torque_id_hash) && !empty($torque_id_hash))
+    elseif (!empty($torque_id_hash))
     {
         if (!is_array($torque_id_hash))
             $torque_id_hash = array($torque_id_hash);
