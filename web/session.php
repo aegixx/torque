@@ -59,7 +59,7 @@ if (isset($sids[0])) {
   // Get GPS data for the currently selected session
   $gps_result = $mysqli->query("SELECT kff1006, kff1005 FROM {$db_table} WHERE session={$session_id} ORDER BY time DESC") or die("ERROR: {$mysqli->error}");
   $geolocs = array();
-  while($geo = $gps_result->fetch_array())) {
+  while($geo = $gps_result->fetch_array()) {
     if (($geo["0"] != 0) && ($geo["1"] != 0)) {
       $geolocs[] = array("lat" => $geo["0"], "lon" => $geo["1"]);
     }

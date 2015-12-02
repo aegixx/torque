@@ -18,8 +18,8 @@ $logged_in = false;
 //There are two ways to authenticate for Open Torque Viewer
 //The uploading data provider running on Android transfers its torque ID, while the User Interface uses User/Password.
 //Which method will be chosen depends on the variable set before including this file
-// Set "$auth_user_with_torque_id" for Authetification with ID
-// Set "$auth_user_with_user_pass" for Authetification with User/Password
+// Set "$auth_user_with_torque_id" for Authentication with ID
+// Set "$auth_user_with_user_pass" for Authentication with User/Password
 
 // Default is authentication for App is the ID
 
