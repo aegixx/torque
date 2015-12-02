@@ -37,7 +37,7 @@ if (!$logged_in && $auth_user_with_user_pass) {
 //The Torque App has no way to provide other authentication information than its torque ID.
 //So, if no restriction of Torque IDs was defined in "creds.php", access to the file "upload_data.php" is always possible.
 
-if (!empty($auth_user_with_torque_id)) {
+if (empty($auth_user_with_torque_id)) {
     $auth_user_with_torque_id = true;
 }
 
