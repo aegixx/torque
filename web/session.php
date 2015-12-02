@@ -1,6 +1,7 @@
 <?php
 
 ini_set('memory_limit', '-1');
+
 require_once ("./creds.php");
 require_once ("./auth_user.php");
 require_once ("./del_session.php");
@@ -10,10 +11,6 @@ require_once ("./get_columns.php");
 require_once ("./plot.php");
 
 $_SESSION['recent_session_id'] = strval(max($sids));
-
-// Define the database connections
-$con = mysql_connect($db_host, $db_user, $db_pass) or die(mysql_error());
-mysql_select_db($db_name, $con) or die(mysql_error());
 
 // Capture the session ID if one has been chosen already
 if (isset($_GET["id"])) {
@@ -59,16 +56,15 @@ if (isset($sids[0])) {
   if($idx>0) {
     $session_id_next = $sids[$idx-1];
   }
-  // Get GPS data for the currently selectedsession
-  $sessionqry = mysql_query("SELECT kff1006, kff1005 FROM $db_table
-              WHERE session=$session_id
-              ORDER BY time DESC", $con) or die(mysql_error());
+  // Get GPS data for the currently selected session
+  $gps_result = $mysqli->query("SELECT kff1006, kff1005 FROM {$db_table} WHERE session={$session_id} ORDER BY time DESC") or die("ERROR: {$mysqli->error}");
   $geolocs = array();
-  while($geo = mysql_fetch_array($sessionqry)) {
+  while($geo = $gps_result->fetch_array())) {
     if (($geo["0"] != 0) && ($geo["1"] != 0)) {
       $geolocs[] = array("lat" => $geo["0"], "lon" => $geo["1"]);
     }
   }
+  $gps_result->close();
 
   // Create array of Latitude/Longitude strings in Google Maps JavaScript format
   $mapdata = array();
@@ -81,25 +77,21 @@ if (isset($sids[0])) {
   $setZoomManually = 0;
 
   // Query the list of years where sessions have been logged, to be used later
-  $yearquery = mysql_query("SELECT YEAR(FROM_UNIXTIME(session/1000)) as 'year'
-              FROM $db_table WHERE session <> ''
-              GROUP BY YEAR(FROM_UNIXTIME(session/1000)) 
-              ORDER BY YEAR(FROM_UNIXTIME(session/1000))", $con) or die(mysql_error());
+  $year_result = $mysqli->query("SELECT YEAR(FROM_UNIXTIME(session/1000)) as 'year' FROM {$db_table} WHERE session <> '' GROUP BY YEAR(FROM_UNIXTIME(session/1000)) ORDER BY YEAR(FROM_UNIXTIME(session/1000))") or die("ERROR: {$mysqli->error}");
   $yeararray = array();
   $i = 0;
-  while($row = mysql_fetch_assoc($yearquery)) {
+  while($row = $year_result->fetch_assoc()) {
     $yeararray[$i] = $row['year'];
     $i = $i + 1;
   }
-
-  //Close the MySQL connection, which is why we can't query years later
-  mysql_free_result($sessionqry);
-  mysql_close($con);
+  $year_result->close();
 } else {
   //Default map in case there's no sessions to query.  Very unlikely this will get used.
   $imapdata = "new google.maps.LatLng(37.235, -115.8111)";
   $setZoomManually = 1;
 }
+
+$mysqli->close();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

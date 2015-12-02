@@ -3,82 +3,69 @@
 //Get Username from Browser-Request
 function get_user()
 {
-    if (isset($_POST["user"])) {
+    if (isset($_POST['user'])) {
         $user = $_POST['user'];
-    }
-    elseif (isset($_GET["user"])) {
+    } elseif (isset($_GET['user'])) {
         $user = $_GET['user'];
-    }
-	else
-    {
-        $user = "";
+    } else {
+        $user = '';
     }
 
     return $user;
 }
 
-
 //Get Password from Browser-Request
 function get_pass()
 {
-    if (isset($_POST["pass"])) {
+    if (isset($_POST['pass'])) {
         $pass = $_POST['pass'];
-    }
-    elseif (isset($_GET["pass"])) {
+    } elseif (isset($_GET['pass'])) {
         $pass = $_GET['pass'];
-    }
-	else
-    {
-        $pass = "";
+    } else {
+        $pass = '';
     }
 
     return $pass;
 }
 
-
 //Get Torque-ID from Browser-Request
 function get_id()
 {
-    $id = "";
+    $id = '';
 
-    if (isset($_POST["id"])) {
-        if (1 === preg_match('/[\da-f]{32}/i', $_POST['id'], $matches))
-        {
+    if (isset($_POST['id'])) {
+        if (1 === preg_match('/[\da-f]{32}/i', $_POST['id'], $matches)) {
+            $id = $matches[0];
+        }
+    } elseif (isset($_GET['id'])) {
+        if (1 === preg_match('/[\da-f]{32}/i', $_GET['id'], $matches)) {
             $id = $matches[0];
         }
     }
-    elseif (isset($_GET["id"])) {
-        if (1 === preg_match('/[\da-f]{32}/i', $_GET['id'], $matches))
-        {
-            $id = $matches[0];
-        }
-    }
-    
+
     return $id;
 }
-
 
 //True if User/Pass match those of creds.php
 //If both $auth_user and $auth_pass are empty, all passwords are accepted.
 function auth_user()
 {
     global $auth_user, $auth_pass;
-    
+
     $user = get_user();
     $pass = get_pass();
 
     //No User/Pass defined: Allow everything
-    if ( empty($auth_user) && empty($auth_pass) ) {
+    if (empty($auth_user) && empty($auth_pass)) {
         return true;
     }
 
-    if ( ($user == $auth_user) && ($pass == $auth_pass) ) {
+    if (($user == $auth_user) && ($pass == $auth_pass)) {
         return true;
     }
 
     return false;
 }
-
 
 //True is Torque-ID matches any of the IDs or HASHes defined in creds.php
 //If both IDs and HASHes are empty, all IDs are accepted.
@@ -92,38 +79,32 @@ function auth_id()
 
     // Parse IDs from "creds.php", if IDs are defined these will overrule HASHES
     $auth_by_hash_possible = false;
-    if (!empty($torque_id))
-    {
-        if (!is_array($torque_id))
+    if (!empty($torque_id)) {
+        if (!is_array($torque_id)) {
             $torque_id = array($torque_id);
+        }
 
-        $torque_id_hash = array_map(md5,$torque_id);
+        $torque_id_hash = array_map(md5, $torque_id);
         $auth_by_hash_possible = true;
     }
     // Parse HASHES
-    elseif (!empty($torque_id_hash))
-    {
-        if (!is_array($torque_id_hash))
+    elseif (!empty($torque_id_hash)) {
+        if (!is_array($torque_id_hash)) {
             $torque_id_hash = array($torque_id_hash);
+        }
         $auth_by_hash_possible = true;
     }
 
     // Authenticate torque instance: Check if we know its HASH
-    if ($auth_by_hash_possible)
-    {
-        if (in_array($session_id, $torque_id_hash) )
-        {
+    if ($auth_by_hash_possible) {
+        if (in_array($session_id, $torque_id_hash)) {
             return true;
         }
     }
     //No IDs/HASHEs defined: Allow everything
-    else
-    {
+    else {
         return true;
     }
 
     return false;
 }
-
-
-?>

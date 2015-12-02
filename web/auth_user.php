@@ -1,19 +1,18 @@
 <?php
-require_once ('creds.php');
-require_once ('auth_functions.php');
+require_once 'creds.php';
+require_once 'auth_functions.php';
 
 //This variable will be evaluated at the end of this file to check if a user is authenticated
 $logged_in = false;
 
-
 //session.cookie_path = "/torque/";
-session_set_cookie_params(0,dirname($_SERVER['SCRIPT_NAME']));
+session_set_cookie_params(0, dirname($_SERVER['SCRIPT_NAME']));
 session_start();
 
 if (!isset($_SESSION['torque_logged_in'])) {
     $_SESSION['torque_logged_in'] = false;
 }
-$logged_in = (boolean)$_SESSION['torque_logged_in'];
+$logged_in = (boolean) $_SESSION['torque_logged_in'];
 
 //There are two ways to authenticate for Open Torque Viewer
 //The uploading data provider running on Android uses its torque ID, while the User Interface uses User/Password.
@@ -22,13 +21,12 @@ $logged_in = (boolean)$_SESSION['torque_logged_in'];
 // Set "$auth_user_with_user_pass" for Authetification with User/Password
 // Default is authentication with user/pass
 
-if(empty($auth_user_with_user_pass)) {
+if (empty($auth_user_with_user_pass)) {
     $auth_user_with_user_pass = true;
 }
 
-if (!$logged_in && $auth_user_with_user_pass)
-{
-    if ( auth_user() ) {
+if (!$logged_in && $auth_user_with_user_pass) {
+    if (auth_user()) {
         $logged_in = true;
     }
 }
@@ -37,24 +35,24 @@ if (!$logged_in && $auth_user_with_user_pass)
 //The Torque App has no way to provide other authentication information than its torque ID.
 //So, if no restriction of Torque IDs was defined in "creds.php", access to the file "upload_data.php" is always possible.
 
-if(empty($auth_user_with_torque_id)) {
+if (empty($auth_user_with_torque_id)) {
     $auth_user_with_torque_id = false;
 }
 
-if (!$logged_in && $auth_user_with_torque_id)
-{
-    if ( auth_id() )
-    {
+if (!$logged_in && $auth_user_with_torque_id) {
+    if (auth_id()) {
         $session_id = get_id();
         $logged_in = true;
     }
 }
 
-
 $_SESSION['torque_logged_in'] = $logged_in;
 
 if (!$logged_in) {
-?><!DOCTYPE html>
+
+?>
+    
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -102,11 +100,9 @@ if (!$logged_in) {
 </html>
 <?php
     exit(0);
-}
-else
-{
+} else {
     //Prepare session
-    
+
     //Connect to Sql, ...
 }
 

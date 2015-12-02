@@ -1,10 +1,10 @@
 <?php
-require_once ('creds.php');
-require_once ('auth_functions.php');
+
+require_once 'creds.php';
+require_once 'auth_functions.php';
 
 //This variable will be evaluated at the end of this file to check if a user is authenticated
 $logged_in = false;
-
 
 //Session makes no sense for the torque app, I assume it to have no cookie handling integrated
 //session_set_cookie_params(0,dirname($_SERVER['SCRIPT_NAME']));
@@ -23,13 +23,12 @@ $logged_in = false;
 
 // Default is authentication for App is the ID
 
-if(empty($auth_user_with_user_pass)) {
+if (empty($auth_user_with_user_pass)) {
     $auth_user_with_user_pass = false;
 }
 
-if (!$logged_in && $auth_user_with_user_pass)
-{
-    if ( auth_user() ) {
+if (!$logged_in && $auth_user_with_user_pass) {
+    if (auth_user()) {
         $logged_in = true;
     }
 }
@@ -38,28 +37,22 @@ if (!$logged_in && $auth_user_with_user_pass)
 //The Torque App has no way to provide other authentication information than its torque ID.
 //So, if no restriction of Torque IDs was defined in "creds.php", access to the file "upload_data.php" is always possible.
 
-if(!empty($auth_user_with_torque_id)) {
+if (!empty($auth_user_with_torque_id)) {
     $auth_user_with_torque_id = true;
 }
 
-if (!$logged_in && $auth_user_with_torque_id)
-{
-    if ( auth_id() )
-    {
+if (!$logged_in && $auth_user_with_torque_id) {
+    if (auth_id()) {
         $session_id = get_id();
         $logged_in = true;
     }
 }
 
-
-
 if (!$logged_in) {
-    $txt  = "ERROR. Please authenticate with ";
-    $txt .= ($auth_user_with_user_pass?"User/Password":"");
-    $txt .= ( ($auth_user_with_user_pass && $auth_user_with_torque_id)?" or ":"");
-    $txt .= ($auth_user_with_torque_id?"Torque-ID":"");
+    $txt = 'ERROR. Please authenticate with ';
+    $txt .= ($auth_user_with_user_pass ? 'User/Password' : '');
+    $txt .= (($auth_user_with_user_pass && $auth_user_with_torque_id) ? ' or ' : '');
+    $txt .= ($auth_user_with_torque_id ? 'Torque-ID' : '');
     echo $txt;
     exit(0);
 }
-
-?>
