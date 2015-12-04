@@ -5,8 +5,8 @@ require 'vendor/autoload.php';
 use Aws\Kinesis\KinesisClient;
 
 $client = KinesisClient::factory(array(
-    'profile' => '<profile in your aws credentials file>',
-    'region'  => '<region name>'
+    // 'profile' => '<profile in your aws credentials file>',
+    'region'  => 'us-east'
 ));
 
 // $result = $client->putRecords(array(
