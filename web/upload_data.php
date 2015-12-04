@@ -6,29 +6,15 @@ use Aws\Kinesis\KinesisClient;
 
 $client = KinesisClient::factory(array(
     // 'profile' => '<profile in your aws credentials file>',
-    'region'  => 'us-east'
+    'region' => 'us-east-1',
 ));
 
-// $result = $client->putRecords(array(
-//     // Records is required
-//     'Records' => array(
-//         array(
-//             // Data is required
-//             'Data' => 'string',
-//             'ExplicitHashKey' => 'string',
-//             // PartitionKey is required
-//             'PartitionKey' => 'string',
-//         ),
-//         // ... repeated
-//     ),
-//     // StreamName is required
-//     'StreamName' => 'string',
-// ));
+$result = $client->putRecord(array(
+    'StreamName' => 'torqueData',
+    'Data' => json_encode($_GET),
+    'PartitionKey' => $_GET['session']
+));
 
-$objectData = json_encode($_GET);
-echo $objectData;
-
-/*
 require_once 'creds.php';
 require_once 'auth_app.php';
 
@@ -84,7 +70,6 @@ if (sizeof($_GET) > 0) {
 }
 
 $mysqli->close();
-*/
 
 // Return the response required by Torque
 echo 'OK!';
