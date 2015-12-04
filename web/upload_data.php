@@ -1,5 +1,34 @@
 <?php
 
+require 'vendor/autoload.php';
+
+use Aws\Kinesis\KinesisClient;
+
+$client = KinesisClient::factory(array(
+    'profile' => '<profile in your aws credentials file>',
+    'region'  => '<region name>'
+));
+
+// $result = $client->putRecords(array(
+//     // Records is required
+//     'Records' => array(
+//         array(
+//             // Data is required
+//             'Data' => 'string',
+//             'ExplicitHashKey' => 'string',
+//             // PartitionKey is required
+//             'PartitionKey' => 'string',
+//         ),
+//         // ... repeated
+//     ),
+//     // StreamName is required
+//     'StreamName' => 'string',
+// ));
+
+$objectData = json_encode($_GET);
+echo $objectData;
+
+/*
 require_once 'creds.php';
 require_once 'auth_app.php';
 
@@ -33,15 +62,10 @@ if (sizeof($_GET) > 0) {
             //else if (preg_match("/^userUnit/", $key) or preg_match("/^defaultUnit/", $key) or (preg_match("/^profile/", $key) and (!preg_match("/^profileName/", $key)))) {
             $submitval = 0;
         } else {
-            $submitval = 0;
+            $keys[] = $key;
+            $values[] = "'".$value."'";
+            $submitval = 1;
         }
-        // NOTE: Use the following "else" statement instead of the one above
-        //       if you want to keep anything else.
-        //else {
-        //    $keys[] = $key;
-        //    $values[] = "'".$value."'";
-        //    $submitval = 1;
-        //}
         // If the field doesn't already exist, add it to the database
         if (!in_array($key, $dbfields) and $submitval == 1) {
             if (is_float($value)) {
@@ -60,6 +84,7 @@ if (sizeof($_GET) > 0) {
 }
 
 $mysqli->close();
+*/
 
 // Return the response required by Torque
 echo 'OK!';
